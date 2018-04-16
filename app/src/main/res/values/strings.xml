@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MoviesAPI</string>
+    <string name="Base_URL">http://api.themoviedb.org/3/movie/popular?api_key=</string>
+    <string name="Key">f6cc55aa1963de5dfcbd1a09f6017e5f</string>
+    <string name="Image_URL">http://image.tmdb.org/t/p/</string>
+    <string name="Image_size">w342</string>
+</resources>
