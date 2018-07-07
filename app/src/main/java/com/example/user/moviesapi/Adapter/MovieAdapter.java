@@ -1,17 +1,22 @@
 package com.example.user.moviesapi.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.user.moviesapi.MainActivity;
 import com.example.user.moviesapi.Model.Movie;
+import com.example.user.moviesapi.MovieActivity;
 import com.example.user.moviesapi.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,11 +38,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie current = movieList.get(position);
+        final Movie current = movieList.get(position);
         holder.movieTitle.setText(current.getTitle());
         holder.movieYear.setText(current.getYear());
-        Glide.with(context).load(current.getImage()).override(500,500).into(holder.movieImage);
-        //Picasso.with(context).load(current.getImage()).into(holder.movieImage);
+        holder.movieCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieActivity.class);
+                intent.putExtra("ID",current.getID());
+                context.startActivity(intent);
+            }
+        });
+        Picasso.with(context).load(current.getImage()).into(holder.movieImage);
     }
 
     @Override
@@ -49,11 +61,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         TextView movieTitle;
         TextView movieYear;
         ImageView movieImage;
+        CardView movieCard;
         public MovieViewHolder(View itemView) {
             super(itemView);
             movieTitle=itemView.findViewById(R.id.title_textview);
             movieYear=itemView.findViewById(R.id.year_textview);
             movieImage=itemView.findViewById(R.id.image_imageview);
+            movieCard = itemView.findViewById(R.id.movie_cardView);
         }
     }
 }

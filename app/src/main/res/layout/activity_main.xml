@@ -5,39 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1C1C1C">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/movies_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/previous_button"
-            android:text="Prev"/>
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:drawableLeft="@drawable/ic_arrow_left_white_36dp"
+            android:background="@drawable/custom_btn"
+            android:id="@+id/previous_button" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:textSize="24dp"
+            android:textColor="#ffffff"
             android:id="@+id/page_textView"/>
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/next_button"
-            android:text="Next"/>
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:drawableRight="@drawable/ic_arrow_right_white_36dp"
+            android:background="@drawable/custom_btn"
+            android:id="@+id/next_button" />
 
     </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/movies_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
-
-        </android.support.v7.widget.RecyclerView>
-    </FrameLayout>
 
 </LinearLayout>
