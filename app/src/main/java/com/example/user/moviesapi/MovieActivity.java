@@ -1,6 +1,9 @@
 package com.example.user.moviesapi;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +11,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -50,6 +55,7 @@ public class MovieActivity extends AppCompatActivity {
     RecyclerView recommendations;
     Movie movie;
     ProgressBar progressBar;
+    android.support.v7.app.ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,8 @@ public class MovieActivity extends AppCompatActivity {
         budget = findViewById(R.id.budget);
         revenue = findViewById(R.id.revenue);
         recommendations = findViewById(R.id.recommendations);
+        actionBar = getSupportActionBar();
+
 
         personAdapter = new PersonAdapter(this,movie.CastAndCrew);
         movieAdapter = new MovieAdapter(this,movie.Recommendations);
@@ -84,7 +92,8 @@ public class MovieActivity extends AppCompatActivity {
         recommendations.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(personAdapter);
         recommendations.setAdapter(movieAdapter);
-
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         String movieID = intent.getStringExtra("ID");
 
         volleyManager.getDetails(movieID);
@@ -92,7 +101,7 @@ public class MovieActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void setViews()
+    public void onLoad()
     {
         progressBar.setVisibility(View.GONE);
         overview.setText(movie.getOverview());
@@ -149,5 +158,19 @@ public class MovieActivity extends AppCompatActivity {
 
         budget.setText("Budget: "+ String.format("%,.02f $",movie.getBudget()));
         revenue.setText("Revenue: "+ String.format("%,.02f $",movie.getRevenue()));
+    }
+
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+                return super.onOptionsItemSelected(item);
     }
 }

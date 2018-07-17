@@ -20,11 +20,16 @@
                 android:value=".SearchResultsActivity" />
 
         </activity>
-        <activity android:name=".MovieActivity">
+        <activity android:name=".MovieActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity" />
 
         </activity>
 
-        <activity android:name=".SearchResultsActivity">
+        <activity android:name=".SearchResultsActivity"
+            android:label="Search Results"
+            android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>

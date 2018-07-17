@@ -3,6 +3,8 @@ package com.example.user.moviesapi.Model;
 import java.util.ArrayList;
 
 public class Movie {
+    public static int totalPages;
+
     private String ID;
     private String Title;
     private String Year;

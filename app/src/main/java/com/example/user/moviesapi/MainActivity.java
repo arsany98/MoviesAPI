@@ -10,11 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +70,16 @@ public class MainActivity extends AppCompatActivity {
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(page>1)
-                    page--;
+                page--;
+                if(page==1)
+                    prev.setVisibility(View.INVISIBLE);
+                else
+                    prev.setVisibility(View.VISIBLE);
+                if(page==Movie.totalPages)
+                    next.setVisibility(View.INVISIBLE);
+                else
+                    next.setVisibility(View.VISIBLE);
+
                 volleyManager.getPopularMovies(page);
                 pageTextView.setText(Integer.toString(page));
             }
@@ -79,8 +87,15 @@ public class MainActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(page<998)
-                    page++;
+                page++;
+                if(page==1)
+                    prev.setVisibility(View.INVISIBLE);
+                else
+                    prev.setVisibility(View.VISIBLE);
+                if(page==Movie.totalPages)
+                    next.setVisibility(View.INVISIBLE);
+                else
+                    next.setVisibility(View.VISIBLE);
                 volleyManager.getPopularMovies(page);
                 pageTextView.setText(Integer.toString(page));
             }
