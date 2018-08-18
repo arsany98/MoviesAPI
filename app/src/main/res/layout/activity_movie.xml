@@ -77,20 +77,38 @@
                     android:layout_height="wrap_content"
                     android:textColor="#C0C0C0"
                     android:textSize="14dp"/>
-                <TextView
-                    android:id="@+id/rating"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/baseline_star_rate_white_36"
-                    android:layout_gravity="center"
-                    android:textColor="#ffffff" />
-                <TextView
-                    android:id="@+id/vote_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#C0C0C0"
-                    android:layout_gravity="center"
-                    android:textSize="14dp"/>
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@drawable/baseline_star_rate_white_36"
+                            android:textColor="#ffffff" />
+                        <TextView
+                            android:id="@+id/vote_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#C0C0C0"
+                            android:textSize="14dp"/>
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/add_to_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/baseline_favorite_border_white_36"
+                        android:text="Add to\nFavorite"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#ffffff"/>
+
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

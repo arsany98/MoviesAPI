@@ -61,12 +61,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
     }
 
-    void onLoad()
+    public void onLoad()
     {
         searchProgress.setVisibility(View.GONE);
         if(movieList.isEmpty())
             noRes.setVisibility(View.VISIBLE);
     }
+
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
@@ -75,8 +76,15 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.favorite_movies)
+        {
+            Intent intent = new Intent(this, FavoriteActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

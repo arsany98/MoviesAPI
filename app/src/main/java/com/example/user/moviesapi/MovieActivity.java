@@ -1,37 +1,28 @@
 package com.example.user.moviesapi;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.example.user.moviesapi.Adapter.MovieAdapter;
 import com.example.user.moviesapi.Adapter.PersonAdapter;
+import com.example.user.moviesapi.Database.DbHelper;
 import com.example.user.moviesapi.Model.Movie;
-import com.example.user.moviesapi.Model.Person;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class MovieActivity extends AppCompatActivity {
     TextView overview;
@@ -56,6 +47,8 @@ public class MovieActivity extends AppCompatActivity {
     Movie movie;
     ProgressBar progressBar;
     android.support.v7.app.ActionBar actionBar;
+    Button addToFavorite;
+    DbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +74,10 @@ public class MovieActivity extends AppCompatActivity {
         budget = findViewById(R.id.budget);
         revenue = findViewById(R.id.revenue);
         recommendations = findViewById(R.id.recommendations);
+        progressBar = findViewById(R.id.progress);
         actionBar = getSupportActionBar();
-
+        addToFavorite = findViewById(R.id.add_to_favorite);
+        dbHelper = new DbHelper(this);
 
         personAdapter = new PersonAdapter(this,movie.CastAndCrew);
         movieAdapter = new MovieAdapter(this,movie.Recommendations);
@@ -92,17 +87,25 @@ public class MovieActivity extends AppCompatActivity {
         recommendations.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(personAdapter);
         recommendations.setAdapter(movieAdapter);
+
+        progressBar.setVisibility(View.VISIBLE);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         String movieID = intent.getStringExtra("ID");
-
+        movie.setID(movieID);
+        if(dbHelper.search(movie))
+        {
+            movie.setFavorite(true);
+        }
         volleyManager.getDetails(movieID);
-        progressBar = findViewById(R.id.progress);
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void onLoad()
     {
+        if(movie.isFavorite())
+        {
+            addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_white_36, 0, 0);
+        }
         progressBar.setVisibility(View.GONE);
         overview.setText(movie.getOverview());
         if(movie.getTrailer()==null)
@@ -120,6 +123,26 @@ public class MovieActivity extends AppCompatActivity {
             }
         });
 
+        addToFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(movie.isFavorite())
+                {
+                    dbHelper.deleteMovie(movie);
+                    Toast.makeText(MovieActivity.this , "Removed From Favorite", Toast.LENGTH_SHORT).show();
+                    addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_border_white_36, 0, 0);
+                    movie.setFavorite(false);
+                }
+                else
+                {
+                    dbHelper.addMovie(movie);
+                    Toast.makeText(MovieActivity.this , "Added To Favorite", Toast.LENGTH_SHORT).show();
+                    addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_white_36, 0, 0);
+                    movie.setFavorite(true);
+                }
+
+            }
+        });
         Picasso.with(this).load(movie.getImage()).into(poster);
 
         title.setText(movie.getTitle());
@@ -171,6 +194,12 @@ public class MovieActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId() == R.id.favorite_movies)
+        {
+            Intent intent = new Intent(this, FavoriteActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

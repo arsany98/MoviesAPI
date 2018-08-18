@@ -21,6 +21,7 @@ public class Movie {
     private double Revenue;
     public ArrayList<Person> CastAndCrew = new ArrayList<>();
     public ArrayList<Movie> Recommendations = new ArrayList<>();
+    private boolean Favorite;
 
     public String getID() {
         return ID;
@@ -132,5 +133,13 @@ public class Movie {
 
     public void setRevenue(double revenue) {
         Revenue = revenue;
+    }
+
+    public boolean isFavorite() {
+        return Favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        Favorite = favorite;
     }
 }

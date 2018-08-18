@@ -1,13 +1,7 @@
 package com.example.user.moviesapi;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -15,13 +9,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.user.moviesapi.Adapter.MovieAdapter;
 import com.example.user.moviesapi.Adapter.PersonAdapter;
 import com.example.user.moviesapi.Model.Movie;
 import com.example.user.moviesapi.Model.Person;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +42,7 @@ public class VolleyManager {
         personAdapter = pAdapter;
         movieAdapter = mAdapter;
     }
-    void getPopularMovies(int page)
+    public void getPopularMovies(int page)
     {
         String URL = context.getString(R.string.Base_URL) + "movie/popular?api_key=" + context.getString(R.string.Key)+"&page="+page;
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -95,7 +87,7 @@ public class VolleyManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    void getDetails(final String id)
+    public void getDetails(final String id)
     {
         String URL = context.getString(R.string.Base_URL) + "movie/" + id + "?api_key=" + context.getString(R.string.Key);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -141,7 +133,7 @@ public class VolleyManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    void getVideos(String id)
+    public void getVideos(String id)
     {
         String URL = context.getString(R.string.Base_URL) + "movie/" + id + "/videos?api_key=" + context.getString(R.string.Key);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -176,7 +168,7 @@ public class VolleyManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    void getRecommendations(String id)
+    public void getRecommendations(String id)
     {
         String URL = context.getString(R.string.Base_URL) + "movie/"+id+"/recommendations?api_key=" + context.getString(R.string.Key);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -220,7 +212,7 @@ public class VolleyManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    void getCredits(String id)
+    public void getCredits(String id)
     {
         String URL = context.getString(R.string.Base_URL) + "movie/"+id+"/credits?api_key=" + context.getString(R.string.Key);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -282,7 +274,7 @@ public class VolleyManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    void Search(String query)
+    public void Search(String query)
     {
         String URL = context.getString(R.string.Base_URL) + "search/movie?api_key=" + context.getString(R.string.Key)+"&query="+query;
         RequestQueue requestQueue = Volley.newRequestQueue(context);

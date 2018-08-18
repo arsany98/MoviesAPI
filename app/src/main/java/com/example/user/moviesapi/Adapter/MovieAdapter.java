@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.user.moviesapi.MainActivity;
 import com.example.user.moviesapi.Model.Movie;
 import com.example.user.moviesapi.MovieActivity;
 import com.example.user.moviesapi.R;
