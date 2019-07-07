@@ -19,8 +19,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
-    Context context;
-    List<Movie> movieList;
+    private Context context;
+    private List<Movie> movieList;
     public MovieAdapter(Context context, List<Movie> movieList)
     {
         this.context=context;
@@ -56,11 +56,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
-        TextView movieTitle;
-        TextView movieYear;
-        ImageView movieImage;
-        CardView movieCard;
-        public MovieViewHolder(View itemView) {
+        private TextView movieTitle;
+        private TextView movieYear;
+        private ImageView movieImage;
+        private CardView movieCard;
+        private MovieViewHolder(View itemView) {
             super(itemView);
             movieTitle=itemView.findViewById(R.id.title_textview);
             movieYear=itemView.findViewById(R.id.year_textview);
@@ -68,4 +68,5 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             movieCard = itemView.findViewById(R.id.movie_cardView);
         }
     }
+
 }

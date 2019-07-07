@@ -2,7 +2,7 @@ package com.example.user.moviesapi.Model;
 
 import java.util.ArrayList;
 
-public class Movie {
+public class TvShow {
     public static int totalPages;
 
     private String ID;
@@ -15,12 +15,9 @@ public class Movie {
     private int voteCount;
     private ArrayList<String> Genres;
     private int Runtime;
-    private ArrayList<String> Directors;
-    private ArrayList<String> Writers;
-    private double Budget;
-    private double Revenue;
+    private ArrayList<String> Creators;
     private ArrayList<Person> CastAndCrew = new ArrayList<>();
-    private ArrayList<Movie> Recommendations = new ArrayList<>();
+    private ArrayList<TvShow> Recommendations = new ArrayList<>();
     private boolean Favorite;
 
     public String getID() {
@@ -29,14 +26,6 @@ public class Movie {
 
     public void setID(String ID) {
         this.ID = ID;
-    }
-
-    public String getOverview() {
-        return Overview;
-    }
-
-    public void setOverview(String overview) {
-        Overview = overview;
     }
 
     public String getTitle() {
@@ -71,6 +60,14 @@ public class Movie {
         Trailer = trailer;
     }
 
+    public String getOverview() {
+        return Overview;
+    }
+
+    public void setOverview(String overview) {
+        Overview = overview;
+    }
+
     public float getRating() {
         return Rating;
     }
@@ -103,36 +100,29 @@ public class Movie {
         Runtime = runtime;
     }
 
-    public ArrayList<String> getDirectors() {
-        return Directors;
+    public ArrayList<String> getCreators() {
+        return Creators;
     }
 
-    public void setDirectors(ArrayList<String> directors) {
-        Directors = directors;
+    public void setCreators(ArrayList<String> creators) {
+        Creators = creators;
     }
 
-    public ArrayList<String> getWriters() {
-        return Writers;
+
+    public ArrayList<Person> getCastAndCrew() {
+        return CastAndCrew;
     }
 
-    public void setWriters(ArrayList<String> writers) {
-        Writers = writers;
+    public void setCastAndCrew(ArrayList<Person> castAndCrew) {
+        CastAndCrew = castAndCrew;
     }
 
-    public double getBudget() {
-        return Budget;
+    public ArrayList<TvShow> getRecommendations() {
+        return Recommendations;
     }
 
-    public void setBudget(double budget) {
-        Budget = budget;
-    }
-
-    public double getRevenue() {
-        return Revenue;
-    }
-
-    public void setRevenue(double revenue) {
-        Revenue = revenue;
+    public void setRecommendations(ArrayList<TvShow> recommendations) {
+        Recommendations = recommendations;
     }
 
     public boolean isFavorite() {
@@ -141,13 +131,5 @@ public class Movie {
 
     public void setFavorite(boolean favorite) {
         Favorite = favorite;
-    }
-
-    public ArrayList<Person> getCastAndCrew() {
-        return CastAndCrew;
-    }
-
-    public ArrayList<Movie> getRecommendations() {
-        return Recommendations;
     }
 }

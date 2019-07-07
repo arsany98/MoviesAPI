@@ -4,9 +4,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -21,11 +21,12 @@ import android.widget.Toast;
 
 import com.example.user.moviesapi.Adapter.MovieAdapter;
 import com.example.user.moviesapi.Adapter.PersonAdapter;
+import com.example.user.moviesapi.Adapter.TvShowAdapter;
 import com.example.user.moviesapi.Database.DbHelper;
-import com.example.user.moviesapi.Model.Movie;
+import com.example.user.moviesapi.Model.TvShow;
 import com.squareup.picasso.Picasso;
 
-public class MovieActivity extends AppCompatActivity {
+public class TvShowActivity extends AppCompatActivity {
     private TextView overview;
     private FrameLayout trailer;
     private VolleyManager volleyManager;
@@ -37,15 +38,12 @@ public class MovieActivity extends AppCompatActivity {
     private TextView genres;
     private TextView runtime;
     private TextView date;
-    private TextView directors;
-    private TextView writers;
-    private TextView budget;
-    private TextView revenue;
+    private TextView createdBy;
     private RecyclerView castAndCrew;
     private PersonAdapter personAdapter;
-    private MovieAdapter movieAdapter;
+    private TvShowAdapter tvShowAdapter;
     private RecyclerView recommendations;
-    private Movie movie;
+    private TvShow tvShow;
     private ProgressBar progressBar;
     private ActionBar actionBar;
     private Button addToFavorite;
@@ -54,9 +52,9 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie);
+        setContentView(R.layout.activity_tv_show);
 
-        movie = new Movie();
+        tvShow = new TvShow();
 
         Intent intent = getIntent();
         thumbnail = findViewById(R.id.thumbnnail);
@@ -70,56 +68,53 @@ public class MovieActivity extends AppCompatActivity {
         runtime = findViewById(R.id.runtime);
         date = findViewById(R.id.release_date);
         castAndCrew = findViewById(R.id.cast);
-        directors = findViewById(R.id.directors);
-        writers = findViewById(R.id.writers);
-        budget = findViewById(R.id.budget);
-        revenue = findViewById(R.id.revenue);
+        createdBy = findViewById(R.id.created_by);
         recommendations = findViewById(R.id.recommendations);
         progressBar = findViewById(R.id.progress);
         actionBar = getSupportActionBar();
         addToFavorite = findViewById(R.id.add_to_favorite);
         dbHelper = new DbHelper(this);
 
-        personAdapter = new PersonAdapter(this,movie.getCastAndCrew());
-        movieAdapter = new MovieAdapter(this,movie.getRecommendations());
+        personAdapter = new PersonAdapter(this,tvShow.getCastAndCrew());
+        tvShowAdapter = new TvShowAdapter(this,tvShow.getRecommendations());
         volleyManager = new VolleyManager(this);
 
         castAndCrew.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recommendations.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         castAndCrew.setAdapter(personAdapter);
-        recommendations.setAdapter(movieAdapter);
+        recommendations.setAdapter(tvShowAdapter);
 
         progressBar.setVisibility(View.VISIBLE);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        String movieID = intent.getStringExtra("ID");
-        movie.setID(movieID);
-        if(dbHelper.search(movie))
+        String tvShowID = intent.getStringExtra("ID");
+        tvShow.setID(tvShowID);
+        if(dbHelper.search(tvShow))
         {
-            movie.setFavorite(true);
+            tvShow.setFavorite(true);
         }
-        volleyManager.getMovieDetails(movieID, movie);
+        volleyManager.getTvShowDetails(tvShowID, tvShow);
     }
 
     public void onLoad()
     {
-        if(movie.isFavorite())
+        if(tvShow.isFavorite())
         {
             addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_white_36, 0, 0);
         }
         progressBar.setVisibility(View.GONE);
-        overview.setText(movie.getOverview());
-        if(movie.getTrailer()==null)
+        overview.setText(tvShow.getOverview());
+        if(tvShow.getTrailer()==null)
             trailer.setVisibility(View.GONE);
 
-        Picasso.with(this).load("https://img.youtube.com/vi/"+ movie.getTrailer() +"/hqdefault.jpg").into(thumbnail);
+        Picasso.with(this).load("https://img.youtube.com/vi/"+ tvShow.getTrailer() +"/hqdefault.jpg").into(thumbnail);
 
         trailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("http://www.youtube.com/watch?v=" + movie.getTrailer()));
+                i.setData(Uri.parse("http://www.youtube.com/watch?v=" + tvShow.getTrailer()));
                 startActivity(i);
             }
         });
@@ -127,63 +122,52 @@ public class MovieActivity extends AppCompatActivity {
         addToFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(movie.isFavorite())
+                if(tvShow.isFavorite())
                 {
-                    dbHelper.deleteMovie(movie);
-                    Toast.makeText(MovieActivity.this , "Removed From Favorite", Toast.LENGTH_SHORT).show();
+                    dbHelper.deleteTvShow(tvShow);
+                    Toast.makeText(TvShowActivity.this , "Removed From Favorite", Toast.LENGTH_SHORT).show();
                     addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_border_white_36, 0, 0);
-                    movie.setFavorite(false);
+                    tvShow.setFavorite(false);
                 }
                 else
                 {
-                    dbHelper.addMovie(movie);
-                    Toast.makeText(MovieActivity.this , "Added To Favorite", Toast.LENGTH_SHORT).show();
+                    dbHelper.addTvShow(tvShow);
+                    Toast.makeText(TvShowActivity.this , "Added To Favorite", Toast.LENGTH_SHORT).show();
                     addToFavorite.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.baseline_favorite_white_36, 0, 0);
-                    movie.setFavorite(true);
+                    tvShow.setFavorite(true);
                 }
 
             }
         });
-        Picasso.with(this).load(movie.getImage()).into(poster);
+        Picasso.with(this).load(tvShow.getImage()).into(poster);
 
-        title.setText(movie.getTitle());
-        rating.setText(movie.getRating() + "/10");
-        voteCount.setText(String.format("%,d",movie.getVoteCount()));
+        title.setText(tvShow.getTitle());
+        rating.setText(tvShow.getRating() + "/10");
+        voteCount.setText(String.format("%,d",tvShow.getVoteCount()));
 
         String s = "";
-        for(int i = 0 ; i < movie.getGenres().size() ; i++)
+        for(int i = 0 ; i < tvShow.getGenres().size() ; i++)
         {
-            s += movie.getGenres().get(i);
-            if(i < movie.getGenres().size()-1)
-             s+= ", ";
+            s += tvShow.getGenres().get(i);
+            if(i < tvShow.getGenres().size()-1)
+                s+= ", ";
         }
         genres.setText(s);
-        String temp = movie.getRuntime()/60 + "h " + movie.getRuntime()%60 + "min";
+        String temp = tvShow.getRuntime()/60 + "h " + tvShow.getRuntime()%60 + "min";
         runtime.setText(temp);
-        date.setText(movie.getYear());
+        date.setText(tvShow.getYear());
 
-        String d="Directors: ";
-        for(int i = 0 ; i < movie.getDirectors().size(); i++)
+        String creators="Created By: ";
+        for(int i = 0 ; i < tvShow.getCreators().size(); i++)
         {
-            d+=movie.getDirectors().get(i);
-            if(i<movie.getDirectors().size()-1)
-                d+=", ";
+            creators+=tvShow.getCreators().get(i);
+            if(i<tvShow.getCreators().size()-1)
+                creators+=", ";
         }
-        directors.setText(d);
+        createdBy.setText(creators);
 
-        String w="Writers: ";
-        for(int i = 0 ; i < movie.getWriters().size(); i++)
-        {
-            w+=movie.getWriters().get(i);
-            if(i<movie.getWriters().size()-1)
-                w+=", ";
-        }
-        writers.setText(w);
-
-        budget.setText("Budget: "+ String.format("%,.02f $",movie.getBudget()));
-        revenue.setText("Revenue: "+ String.format("%,.02f $",movie.getRevenue()));
         personAdapter.notifyDataSetChanged();
-        movieAdapter.notifyDataSetChanged();
+        tvShowAdapter.notifyDataSetChanged();
     }
 
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
